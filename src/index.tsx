@@ -1,6 +1,5 @@
-import * as React from 'react';
+export { default as ViewModel } from './view-model';
+export * from './view-model';
 
-// Delete me
-export const Thing = () => {
-  return <div>Welcome to your first test package.</div>;
-};
+export { default as useViewModel } from './useViewModel';
+export * from './useViewModel';
