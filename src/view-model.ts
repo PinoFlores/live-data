@@ -21,7 +21,6 @@ export default abstract class ViewModel<T> {
   }
 
   protected notify(): void {
-    console.log(this.subscribers);
     for (const handler of this.subscribers) handler(this.subject);
   }
 
