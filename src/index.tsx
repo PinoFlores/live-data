@@ -1,5 +1,5 @@
-export { default as ViewModel } from './view-model';
-export * from './view-model';
+export { default as LiveData } from './live-data';
+export * from './live-data';
 
-export { default as useViewModel } from './useViewModel';
-export * from './useViewModel';
+export { default as useLiveData } from './useLiveData';
+export * from './useLiveData';

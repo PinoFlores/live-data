@@ -1,6 +1,6 @@
 export type Subscriber<T> = (newState: T) => void;
 
-export default abstract class ViewModel<T> {
+export default abstract class LiveData<T> {
   protected subject: T;
   private subscribers: Subscriber<T>[] = [];
 
