@@ -1,11 +1,11 @@
 export type Subscriber<T> = (newState: T) => void;
 
-export default abstract class LiveData<T> {
+export default class LiveData<T> {
   protected subject: T;
-  private subscribers: Subscriber<T>[] = [];
+  protected subscribers: Subscriber<T>[] = [];
 
-  constructor(subject: T) {
-    this.subject = subject;
+  constructor(initialState: T) {
+    this.subject = initialState;
   }
 
   private off(handler: Subscriber<T>): void {
@@ -14,19 +14,17 @@ export default abstract class LiveData<T> {
   }
 
   public addSubscribe(handler: Subscriber<T>): Function {
-    if (typeof handler !== 'function')
-      throw new Error('InvalidEventHandlerType');
+    if (typeof handler !== 'function') throw new Error('InvalidEventHandlerType');
     this.subscribers.push(handler);
     return () => this.off(handler);
   }
 
-  protected notify(): void {
-    for (const handler of this.subscribers) handler(this.subject);
+  public removeSubscribers(): void {
+    this.subscribers = [];
   }
 
-  protected setSubject(subject: T): void {
-    this.subject = subject;
-    this.notify();
+  protected notify(): void {
+    for (const handler of this.subscribers) handler(this.subject);
   }
 
   public getSubject(): T {

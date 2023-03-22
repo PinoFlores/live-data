@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
  *
  * @author <pino0071@gmail.com> Jose Aburto
  */
-export default function useLiveData<T, K extends LiveData<T>>(viewModel: K): UseLiveData<T, K> {
+export default function useLiveData<T, K extends LiveData<T>>(viewModel: K): { state: T } {
   const [state, setState] = useState<T>(viewModel.getSubject());
 
   useEffect(() => {
@@ -20,10 +20,5 @@ export default function useLiveData<T, K extends LiveData<T>>(viewModel: K): Use
     };
   }, [viewModel]);
 
-  return { state, action: viewModel };
+  return { state };
 }
-
-export type UseLiveData<T, K extends LiveData<T>> = {
-  state: T;
-  action: Omit<K, 'getSubject' | 'addSubscribe' | 'setSubject'>;
-};
