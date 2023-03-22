@@ -117,12 +117,12 @@ export default abstract class LiveData<T> {
    * Even if the `ViewModel`s you exposes `subject/data`
    * as `LiveData`, we also have `MutableLiveData` that
    * extends from this base class, so for avoiding direct
-   * mutations, we return a cloned version of that `subject/data`
+   * mutations, we return a 'freeze' the `subject/data`
    * to prevent inconsistent states. Any intent of mutate directly
    * it will not have any reactive effect and also won't mutate the
    * state.
    */
   public getSubject(): T {
-    return Object.assign({}, this.subject);
+    return Object.freeze(this.subject);
   }
 }
