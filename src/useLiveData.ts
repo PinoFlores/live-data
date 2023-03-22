@@ -4,21 +4,32 @@ import { useEffect, useState } from 'react';
 /**
  * ### useLiveData hook adapter
  *
- * The responsibility of this hook is to integrate the `LiveData` with the
- * `react` library. In this way we decouple the lib or framework from our
- * app.
+ * This is a `reactive` data that notify its changes to every
+ * piece of code observing it. So in other words, this is
+ * an `observable data`.
+ *
+ * The responsibility of this hook is:
+ * 1. Integrate `ViewModel`s with `React` ecosystem.
+ * 2. Expose immutable state
+ * 3. Expose mutating API (that comes from the `ViewModel`) to mutate the state.
+ * 4. And last but not least, decoupling `React` (Presenters) library from `logic` (Logic).
  *
  * @author <pino0071@gmail.com> Jose Aburto
  */
-export default function useLiveData<T, K extends LiveData<T>>(viewModel: K): { state: T } {
-  const [state, setState] = useState<T>(viewModel.getSubject());
+export default function useLiveData<T, V, K extends LiveData<T> = LiveData<T>>(liveData: K, viewModel: V): UseLiveData<T, V> {
+  const [state, setState] = useState<T>(liveData.getSubject());
 
   useEffect(() => {
-    const off = viewModel.addSubscribe((newState: T) => setState((pre) => ({ ...pre, ...newState })));
+    const off = liveData.addSubscribe((newState: T) => setState((pre) => ({ ...pre, ...newState })));
     return () => {
       off();
     };
   }, [viewModel]);
 
-  return { state };
+  return { state, action: viewModel };
 }
+
+export type UseLiveData<T, V> = {
+  state: T;
+  action: V;
+};

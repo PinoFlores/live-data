@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import useEvent from '@testing-library/user-event';
-import { MutableLiveData, useMutableLiveData } from '../src';
+import { MutableLiveData, useLiveData, LiveData } from '../src';
 import { render, waitFor, screen, act } from '@testing-library/react';
 
 // Our data to observe
@@ -14,16 +14,17 @@ type Credentials = {
 class LoginViewModel {
   private data: MutableLiveData<Credentials>;
 
+  // ⚠️ Expose you data as immuntable. Expose your mutators func in your viewmodel to mutate the data.
+  public getMutableLiveData(): LiveData<Credentials> {
+    return this.data;
+  }
+
   constructor() {
     this.data = new MutableLiveData({ email: '', password: '' });
   }
 
   public setData(creds: Credentials): void {
     this.data.setSubject(creds);
-  }
-
-  public getMutableLiveData(): MutableLiveData<Credentials> {
-    return this.data;
   }
 }
 
@@ -57,7 +58,7 @@ const Form = (props: LoginFormProps): JSX.Element => {
 // Some adapter component to integrate/join the ViewModel and the Presenter
 function withLoginViewModel(Component: React.ComponentType<LoginFormProps>, viewModel: LoginViewModel): React.ComponentType<{}> {
   return function (): JSX.Element {
-    const { state, action } = useMutableLiveData<Credentials, LoginViewModel>(viewModel.getMutableLiveData(), viewModel);
+    const { state, action } = useLiveData<Credentials, LoginViewModel>(viewModel.getMutableLiveData(), viewModel);
     return <Component state={state} setState={(creds: Credentials) => action.setData(creds)} />;
   };
 }

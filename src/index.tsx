@@ -6,6 +6,3 @@ export * from './mutable-live-data';
 
 export { default as useLiveData } from './useLiveData';
 export * from './useLiveData';
-
-export { default as useMutableLiveData } from './useMutableLiveData';
-export * from './useMutableLiveData';
