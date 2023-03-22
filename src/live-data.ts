@@ -105,7 +105,7 @@ export default abstract class LiveData<T> {
    *   }, [])
    * }
    */
-  public addSubscribe(handler: Subscriber<T>): Function {
+  public addSubscribe(handler: Subscriber<T>): () => void {
     if (typeof handler !== 'function') throw new Error('InvalidEventHandlerType');
     this.subscribers.push(handler);
     return () => this.off(handler);

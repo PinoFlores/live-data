@@ -16,20 +16,11 @@ import { useEffect, useState } from 'react';
  *
  * @author <pino0071@gmail.com> Jose Aburto
  */
-export default function useLiveData<T, V, K extends LiveData<T> = LiveData<T>>(liveData: K, viewModel: V): UseLiveData<T, V> {
+export default function useLiveData<T, K extends LiveData<T> = LiveData<T>>(liveData: K): T {
   const [state, setState] = useState<T>(liveData.getSubject());
-
   useEffect(() => {
-    const off = liveData.addSubscribe((newState: T) => setState((pre) => ({ ...pre, ...newState })));
-    return () => {
-      off();
-    };
-  }, [viewModel]);
-
-  return { state, action: viewModel };
+    const off = liveData.addSubscribe(setState);
+    return off;
+  }, []);
+  return state;
 }
-
-export type UseLiveData<T, V> = {
-  state: T;
-  action: V;
-};

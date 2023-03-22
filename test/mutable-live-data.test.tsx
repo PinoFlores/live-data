@@ -58,8 +58,8 @@ const Form = (props: LoginFormProps): JSX.Element => {
 // Some adapter component to integrate/join the ViewModel and the Presenter
 function withLoginViewModel(Component: React.ComponentType<LoginFormProps>, viewModel: LoginViewModel): React.ComponentType<{}> {
   return function (): JSX.Element {
-    const { state, action } = useLiveData<Credentials, LoginViewModel>(viewModel.getMutableLiveData(), viewModel);
-    return <Component state={state} setState={(creds: Credentials) => action.setData(creds)} />;
+    const state = useLiveData<Credentials>(viewModel.getMutableLiveData());
+    return <Component state={state} setState={(creds: Credentials) => viewModel.setData(creds)} />;
   };
 }
 
